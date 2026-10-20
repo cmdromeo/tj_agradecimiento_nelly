@@ -1,19 +1,4 @@
-<!doctype html>
-<html lang="es">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<!-- Vista previa al compartir (WhatsApp, Facebook). Reemplace TU-DOMINIO por la dirección donde publique esta carpeta. -->
-<meta name="description" content="Con profundo agradecimiento, la familia Rojas Cangahuala comparte estas palabras en memoria de nuestra amada Nelly Teresa Cangahuala Castro.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Agradecimiento · Familia Rojas Cangahuala">
-<meta property="og:description" content="Con profundo agradecimiento, la familia Rojas Cangahuala comparte estas palabras en memoria de nuestra amada Nelly Teresa Cangahuala Castro.">
-<meta property="og:image" content="https://TU-DOMINIO/compartir.jpg">
-<meta property="og:image:type" content="image/jpeg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:url" content="https://TU-DOMINIO/">
-<meta name="twitter:card" content="summary_large_image">
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Agradecimiento Familia Rojas Cangahuala</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -137,6 +122,25 @@ body{
 .wa:hover{background:#6E4C58}
 .wa:focus-visible{outline:2px solid var(--tinta);outline-offset:3px}
 .wa svg{width:18px;height:18px;flex:none}
+.musica{
+  position:fixed;z-index:20;
+  right:calc(16px + env(safe-area-inset-right, 0px));bottom:calc(16px + env(safe-area-inset-bottom, 0px));
+  display:inline-flex;align-items:center;justify-content:center;gap:2px;width:48px;height:48px;padding:0;border-radius:50%;
+  background:rgba(255,252,251,.95);color:var(--tinta);border:1px solid var(--sobre-sombra);
+  font:inherit;font-size:14px;font-weight:600;cursor:pointer;
+  box-shadow:0 8px 20px -12px rgba(176,127,140,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+}
+.musica:focus-visible{outline:2px solid var(--tinta);outline-offset:3px}
+.musica svg{width:18px;height:18px;flex:none}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.musica .ondas{display:none}
+.musica[aria-pressed="true"] .ondas{display:inline-block}
+.escena{padding-bottom:64px}
+.musica .ondas i{display:inline-block;width:2px;height:9px;margin-left:1.5px;border-radius:1px;background:var(--sobre-sombra);vertical-align:middle;transform-origin:bottom}
+.musica[aria-pressed="true"] .ondas i{background:var(--salvia);animation:onda 1.6s ease-in-out infinite}
+.musica[aria-pressed="true"] .ondas i:nth-child(2){animation-delay:-.5s}
+.musica[aria-pressed="true"] .ondas i:nth-child(3){animation-delay:-1s}
+@keyframes onda{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
 
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{transition-duration:.01ms!important;transition-delay:0s!important;animation:none!important}
@@ -146,11 +150,12 @@ body{
 @keyframes caer{to{transform:translateY(110vh) rotate(260deg) translateX(40px)}}
 .escena{position:relative;z-index:1}
 </style>
-</head>
-<body>
-
 
 <div class="petalos" aria-hidden="true"><i style="left:8%;animation-duration:17s;animation-delay:-3s"></i><i style="left:24%;animation-duration:22s;animation-delay:-11s;opacity:.4"></i><i style="left:47%;animation-duration:19s;animation-delay:-7s"></i><i style="left:68%;animation-duration:24s;animation-delay:-15s;opacity:.4"></i><i style="left:86%;animation-duration:18s;animation-delay:-1s"></i></div>
+<button class="musica" id="musica" type="button" aria-pressed="false">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg>
+  <span id="musicaTxt" class="sr">Música</span><span class="ondas" aria-hidden="true"><i></i><i></i><i></i></span>
+</button>
 <main class="escena">
   <div class="sobre-wrap" id="sobreWrap">
     <div class="sobre" id="sobre">
@@ -232,6 +237,7 @@ body{
   function abrir(){
     if(abriendo) return; abriendo=true;
     sobre.classList.add('abierto');
+    if(window.Piano && !Piano.iniciada) Piano.activar();
     rotulo.classList.add('oculto-suave');
     if(reduce){ mostrar(null); return; }
     setTimeout(function(){
@@ -262,12 +268,102 @@ body{
   document.getElementById('abrirTxt').addEventListener('click',abrir);
   document.getElementById('volver').addEventListener('click',cerrar);
   (function(){
-    var enlace = /claude/.test(location.hostname) || location.protocol==='file:' ? location.href.split('#')[0] : location.href.split('#')[0];
+    var enlace = /claude/.test(location.hostname) || location.protocol==='file:' ? 'https://claude.ai/artifact/P67erayS1wJtHfm8EjKMss' : location.href.split('#')[0];
     var msg='Con profundo agradecimiento, la familia Rojas Cangahuala les comparte estas palabras en memoria de nuestra amada Nelly Teresa Cangahuala Castro.\n\n'+enlace;
     document.getElementById('compartirWa').href='https://wa.me/?text='+encodeURIComponent(msg);
   })();
 })();
 </script>
+<script>
+/* Pieza original para piano, generada en el navegador: lenta, en Fa mayor, a volumen bajo. */
+(function(){
+  var btn=document.getElementById('musica'), txt=document.getElementById('musicaTxt');
+  var AC=window.AudioContext||window.webkitAudioContext;
+  if(!AC){ btn.hidden=true; return; }
+  var ctx=null, master, seco, reverb, filtro, sonando=false, timer=null, siguiente=0, compas=0;
+  var NEGRA=1.05, COMPAS=NEGRA*4;
+  /* acordes [bajo, voces...] en MIDI */
+  var acordes=[
+    [41,48,57,64],[45,52,55,60],[38,50,57,65],[46,53,57,62],
+    [43,50,53,58],[48,55,58,64],[46,53,57,62],[48,55,60,64]
+  ];
+  var melodia=[
+    [[72,0,2],[69,2,2]],[[67,0,2],[64,2,2]],[[65,0,1.5],[69,1.5,2.5]],[[70,0,1.5],[69,1.5,1],[65,2.5,1.5]],
+    [[67,0,2],[65,2,2]],[[64,0,3],[67,3,1]],[[65,0,2],[62,2,2]],[[64,0,2.5],[67,2.5,1.5]]
+  ];
+  function hz(m){return 440*Math.pow(2,(m-69)/12)}
+  function impulso(seg){
+    var len=ctx.sampleRate*seg, buf=ctx.createBuffer(2,len,ctx.sampleRate);
+    for(var c=0;c<2;c++){var d=buf.getChannelData(c);for(var i=0;i<len;i++){d[i]=(Math.random()*2-1)*Math.pow(1-i/len,3)}}
+    return buf;
+  }
+  function preparar(){
+    ctx=new AC();
+    master=ctx.createGain(); master.gain.value=0; master.connect(ctx.destination);
+    filtro=ctx.createBiquadFilter(); filtro.type='lowpass'; filtro.frequency.value=2200; filtro.Q.value=.3;
+    seco=ctx.createGain(); seco.gain.value=.7;
+    reverb=ctx.createConvolver(); reverb.buffer=impulso(3.6);
+    var mojado=ctx.createGain(); mojado.gain.value=.45;
+    filtro.connect(seco); seco.connect(master);
+    filtro.connect(reverb); reverb.connect(mojado); mojado.connect(master);
+  }
+  function nota(m,t,vel,dur){
+    var f=hz(m), parciales=[[1,1],[2,.38],[3,.14],[4,.06]];
+    var cuerpo=Math.min(dur+1.8, 5.5*Math.pow(220/f,.35));
+    parciales.forEach(function(p,k){
+      var o=ctx.createOscillator(), g=ctx.createGain();
+      o.type='sine'; o.frequency.value=f*p[0]*(1+k*0.0007); o.detune.value=(Math.random()-.5)*3;
+      var pico=vel*p[1];
+      g.gain.setValueAtTime(0,t);
+      g.gain.linearRampToValueAtTime(pico,t+0.012);
+      g.gain.exponentialRampToValueAtTime(pico*.35,t+0.35/(k+1));
+      g.gain.exponentialRampToValueAtTime(0.0001,t+cuerpo/(1+k*.6));
+      o.connect(g); g.connect(filtro);
+      o.start(t); o.stop(t+cuerpo+0.1);
+    });
+  }
+  function programarCompas(t){
+    var a=acordes[compas%8], orden=[0,1,2,3,2,1,2,3];
+    orden.forEach(function(i,k){
+      var vel=(i===0?.11:.055)*(k%2?0.85:1)*(0.92+Math.random()*.16);
+      nota(a[i],t+k*NEGRA/2+(Math.random()*.012),vel,NEGRA*(i===0?4:1.5));
+    });
+    melodia[compas%8].forEach(function(n){
+      nota(n[0],t+n[1]*NEGRA+0.02,.075*(0.9+Math.random()*.2),n[2]*NEGRA);
+    });
+    compas++;
+  }
+  function bucle(){
+    while(siguiente<ctx.currentTime+COMPAS*1.2){ programarCompas(siguiente); siguiente+=COMPAS; }
+  }
+  function encender(){
+    if(!ctx) preparar();
+    ctx.resume();
+    if(!siguiente) siguiente=ctx.currentTime+0.15;
+    if(siguiente<ctx.currentTime) siguiente=ctx.currentTime+0.15;
+    master.gain.cancelScheduledValues(ctx.currentTime);
+    master.gain.setValueAtTime(master.gain.value,ctx.currentTime);
+    master.gain.linearRampToValueAtTime(.32,ctx.currentTime+4);
+    bucle(); clearInterval(timer); timer=setInterval(bucle,400);
+    sonando=true; btn.setAttribute('aria-pressed','true'); txt.textContent='Pausar música';
+  }
+  function apagar(){
+    if(!ctx) return;
+    var now=ctx.currentTime;
+    master.gain.cancelScheduledValues(now); master.gain.setValueAtTime(master.gain.value,now);
+    master.gain.linearRampToValueAtTime(0,now+1.2);
+    clearInterval(timer); timer=null;
+    setTimeout(function(){ if(!sonando) ctx.suspend(); },1300);
+    sonando=false; btn.setAttribute('aria-pressed','false'); txt.textContent='Escuchar música';
+  }
+  btn.addEventListener('click',function(){ Piano.iniciada=true; sonando?apagar():encender(); });
+  document.addEventListener('visibilitychange',function(){
+    if(!ctx) return;
+    if(document.hidden){ ctx.suspend(); } else if(sonando){ ctx.resume(); siguiente=Math.max(siguiente,ctx.currentTime+.15); }
+  });
+  window.Piano={iniciada:false, activar:function(){ this.iniciada=true; encender(); }};
+  txt.textContent='Escuchar música';
+})();
+</script>
 
-</body>
-</html>
+</body></html>
