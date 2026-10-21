@@ -1,4 +1,19 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Vista previa al compartir (WhatsApp, Facebook). Reemplace TU-DOMINIO por la dirección donde publique esta carpeta. -->
+<meta name="description" content="Con profundo agradecimiento, la familia Rojas Cangahuala comparte estas palabras en memoria de nuestra amada Nelly Teresa Cangahuala Castro.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Agradecimiento · Familia Rojas Cangahuala">
+<meta property="og:description" content="Con profundo agradecimiento, la familia Rojas Cangahuala comparte estas palabras en memoria de nuestra amada Nelly Teresa Cangahuala Castro.">
+<meta property="og:image" content="https://TU-DOMINIO/compartir.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://TU-DOMINIO/">
+<meta name="twitter:card" content="summary_large_image">
 <title>Agradecimiento Familia Rojas Cangahuala</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -150,6 +165,9 @@ body{
 @keyframes caer{to{transform:translateY(110vh) rotate(260deg) translateX(40px)}}
 .escena{position:relative;z-index:1}
 </style>
+</head>
+<body>
+
 
 <div class="petalos" aria-hidden="true"><i style="left:8%;animation-duration:17s;animation-delay:-3s"></i><i style="left:24%;animation-duration:22s;animation-delay:-11s;opacity:.4"></i><i style="left:47%;animation-duration:19s;animation-delay:-7s"></i><i style="left:68%;animation-duration:24s;animation-delay:-15s;opacity:.4"></i><i style="left:86%;animation-duration:18s;animation-delay:-1s"></i></div>
 <button class="musica" id="musica" type="button" aria-pressed="false">
@@ -268,7 +286,7 @@ body{
   document.getElementById('abrirTxt').addEventListener('click',abrir);
   document.getElementById('volver').addEventListener('click',cerrar);
   (function(){
-    var enlace = /claude/.test(location.hostname) || location.protocol==='file:' ? 'https://claude.ai/artifact/P67erayS1wJtHfm8EjKMss' : location.href.split('#')[0];
+    var enlace = /claude/.test(location.hostname) || location.protocol==='file:' ? location.href.split('#')[0] : location.href.split('#')[0];
     var msg='Con profundo agradecimiento, la familia Rojas Cangahuala les comparte estas palabras en memoria de nuestra amada Nelly Teresa Cangahuala Castro.\n\n'+enlace;
     document.getElementById('compartirWa').href='https://wa.me/?text='+encodeURIComponent(msg);
   })();
@@ -356,14 +374,50 @@ body{
     setTimeout(function(){ if(!sonando) ctx.suspend(); },1300);
     sonando=false; btn.setAttribute('aria-pressed','false'); txt.textContent='Escuchar música';
   }
-  btn.addEventListener('click',function(){ Piano.iniciada=true; sonando?apagar():encender(); });
+  function externa(){ return window.MusicaExterna && window.MusicaExterna.ok; }
+  btn.addEventListener('click',function(){ Piano.iniciada=true; if(externa()){ MusicaExterna.alternar(); return; } sonando?apagar():encender(); });
   document.addEventListener('visibilitychange',function(){
     if(!ctx) return;
     if(document.hidden){ ctx.suspend(); } else if(sonando){ ctx.resume(); siguiente=Math.max(siguiente,ctx.currentTime+.15); }
   });
-  window.Piano={iniciada:false, activar:function(){ this.iniciada=true; encender(); }};
+  window.Piano={iniciada:false,
+    activar:function(){ this.iniciada=true; if(externa()){ MusicaExterna.reproducir(); return; } encender(); },
+    estado:function(on){ btn.setAttribute('aria-pressed',on?'true':'false'); txt.textContent=on?'Pausar música':'Escuchar música'; },
+    apagarPiano:function(){ if(sonando) apagar(); }};
   txt.textContent='Escuchar música';
 })();
 </script>
+<audio id="cancion" src="musica.mp3" preload="auto" loop playsinline></audio>
+<script>
+/* Canción elegida por la familia: entra suave y se repite. Si no carga, suena el piano. */
+(function(){
+  var a=document.getElementById('cancion'), VOL=.5, fade=null;
+  function rampa(destino,ms,fin){
+    clearInterval(fade); var paso=(destino-a.volume)/(ms/50);
+    fade=setInterval(function(){
+      var v=a.volume+paso;
+      if((paso>0&&v>=destino)||(paso<=0&&v<=destino)){ a.volume=destino; clearInterval(fade); fin&&fin(); }
+      else a.volume=Math.max(0,Math.min(1,v));
+    },50);
+  }
+  window.MusicaExterna={ok:true,
+    reproducir:function(){
+      a.volume=0;
+      var p=a.play();
+      if(p&&p.catch) p.catch(function(){ MusicaExterna.ok=false; Piano.activar(); });
+      rampa(VOL,3000);
+    },
+    alternar:function(){ if(a.paused) this.reproducir(); else rampa(0,1000,function(){ a.pause(); }); }
+  };
+  a.addEventListener('play',function(){ Piano.apagarPiano(); Piano.estado(true); });
+  a.addEventListener('pause',function(){ Piano.estado(false); });
+  a.addEventListener('error',function(){ MusicaExterna.ok=false; if(Piano.iniciada) Piano.activar(); });
+  document.addEventListener('visibilitychange',function(){
+    if(document.hidden && !a.paused){ a.pause(); a.dataset.reanudar='1'; }
+    else if(!document.hidden && a.dataset.reanudar){ delete a.dataset.reanudar; a.play().catch(function(){}); }
+  });
+})();
+</script>
 
-</body></html>
+</body>
+</html>
